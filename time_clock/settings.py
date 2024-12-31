@@ -12,15 +12,18 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import environ
+import os
+
 env = environ.Env()
 
+env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
 
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False)
 )
 
-environ.Env.read_env()
+environ.Env.read_env(env_path)
 
 
 ENGINE = env('ENGINE', default='sqlite3')
