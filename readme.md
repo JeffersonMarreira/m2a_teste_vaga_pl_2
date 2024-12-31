@@ -56,3 +56,8 @@ Desenvolver um sistema simples de ponto eletrônico que permita registrar e cons
 ### 7. Documentação
 - Incluir um `README.md` com instruções sobre como configurar o ambiente, instalar dependências e rodar o projeto.
 - Documentar funções e classes usando docstrings.
+
+
+
+python manage.py collectstatic
+python manage.py createsuperuser
