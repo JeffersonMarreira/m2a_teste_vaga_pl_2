@@ -1,5 +1,7 @@
 from django.test import TestCase, Client
 from django.urls import reverse
+from rest_framework.test import APITestCase
+from rest_framework import status
 from .models import Company, Employee, TimeRecord
 from datetime import datetime, time
 
@@ -134,3 +136,85 @@ class HomeViewTest(TestCase):
         })
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Ação check_out concluída para Funcionário Teste")
+
+
+class CompanyAPITest(APITestCase):
+    def setUp(self):
+        self.company = Company.objects.create(name="Empresa Teste", address="Endereço Teste", phone="123456789")
+        self.company_url = reverse('company-list')
+
+    def test_get_companies(self):
+        response = self.client.get('/api/companies/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+
+    def test_create_company(self):
+        data = {"name": "Nova Empresa", "address": "Novo Endereço", "phone": "987654321"}
+        response = self.client.post('/api/companies/', data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Company.objects.count(), 2)
+
+class EmployeeAPITest(APITestCase):
+    def setUp(self):
+        self.company = Company.objects.create(name="Empresa Teste", address="Endereço Teste", phone="123456789")
+        self.employee = Employee.objects.create(
+            name="Funcionário Teste",
+            email="teste@empresa.com",
+            company=self.company,
+            standard_check_in=time(9, 0),
+            standard_check_out=time(18, 0),
+            auth_code="123456"
+        )
+        self.employee_url = reverse('employee-list')
+
+    def test_get_employees(self):
+        response = self.client.get('/api/employees/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+
+    def test_create_employee(self):
+        data = {
+            "name": "Novo Funcionário",
+            "email": "novo@empresa.com",
+            "company": self.company.id,
+            "standard_check_in": "09:00:00",
+            "standard_check_out": "18:00:00"
+        }
+        response = self.client.post('/api/employees/', data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Employee.objects.count(), 2)
+
+class TimeRecordAPITest(APITestCase):
+    def setUp(self):
+        self.company = Company.objects.create(name="Empresa Teste", address="Endereço Teste", phone="123456789")
+        self.employee = Employee.objects.create(
+            name="Funcionário Teste",
+            email="teste@empresa.com",
+            company=self.company,
+            standard_check_in=time(9, 0),
+            standard_check_out=time(18, 0),
+            auth_code="123456"
+        )
+        self.time_record = TimeRecord.objects.create(
+            employee=self.employee,
+            date=datetime.today().date(),
+            check_in=time(9, 0),
+            check_out=time(18, 0)
+        )
+        self.time_record_url = reverse('timerecord-list')
+
+    def test_get_time_records(self):
+        response = self.client.get('/api/time-records/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+
+    def test_create_time_record(self):
+        data = {
+            "employee": self.employee.id,
+            "date": datetime.today().date(),
+            "check_in": "09:00:00",
+            "check_out": "18:00:00"
+        }
+        response = self.client.post('/api/time-records/', data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(TimeRecord.objects.count(), 2)
