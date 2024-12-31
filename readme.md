@@ -19,7 +19,7 @@ Desenvolver um sistema simples de ponto eletrônico que permita registrar e cons
 1. Clone o repositório para a sua máquina local:
 
     ```sh
-    git clone https://github.com/daniel-root/m2a_teste_vaga_pl_2/tree/feature/eletronic_time_clock
+    git clone https://github.com/daniel-root/m2a_teste_vaga_pl_2.git
     cd m2a_teste_vaga_pl_2
     ```
 
