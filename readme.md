@@ -1,63 +1,98 @@
 <h1 align="center">Teste de Programação - Nível Pleno</h1>
-
 <p align="center"><i>Aplicação: Controle de Ponto Eletrônico</i></p>
 
 ![Static Badge](https://img.shields.io/badge/python-blue)
 ![Static Badge](https://img.shields.io/badge/orm-django-3fb950)
-![Static Badge](https://img.shields.io/badge/report-PyMuPDF-DAA520)
 
 ## Objetivo
+
 Desenvolver um sistema simples de ponto eletrônico que permita registrar e consultar batidas de entrada, saída e intervalo de funcionários de diferentes empresas. O sistema deve ser construído usando Django e deve incluir funcionalidades básicas, com foco em qualidade de código, boas práticas e experiência do usuário.
 
-## Requisitos do Sistema
+## Pré-requisitos
 
-### 1. Modelagem de Dados
-- **Model `Empresa`**:
-  - Campos: `nome`, `endereco`, `telefone`
-  
-- **Model `Funcionario`**:
-  - Campos: `nome`, `email`, `empresa` (chave estrangeira para o modelo Empresa)
-  
-- **Model `Ponto`**:
-  - Campos: `funcionario` (chave estrangeira para o modelo Funcionario), `data`, `entrada`, `saida`, `intervalo`
-  - Métodos para calcular horas trabalhadas e atrasos/horas extras.
+- [Python 3.8+](https://www.python.org/downloads/)
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
-### 2. Funcionalidades
-- **Página Inicial**:
-  - Permitir que o usuário selecione uma empresa existente ou cadastre uma nova.
-  
-- **Gerenciamento de Empresas**:
-  - Cadastrar e atualizar informações de empresas.
-  
-- **Gerenciamento de Funcionários**:
-  - Cadastrar e atualizar informações de funcionários associados a uma empresa.
-  
-- **Registro de Batidas**:
-  - Página para registrar batidas de ponto (entrada, saída e intervalo) para funcionários.
-  
-- **Consulta de Batidas**:
-  - Página para visualizar as batidas registradas, com a possibilidade de filtrar por data e funcionário.
+## Configuração do Ambiente
 
-### 3. Interface de Usuário
-- Usar Django Templates para criar as páginas. A aparência deve ser simples, mas funcional, podendo utilizar CSS ou um framework como Bootstrap para melhorar a usabilidade.
-- Fornecer feedback ao usuário após ações (como mensagens de sucesso ou erro).
+1. Clone o repositório para a sua máquina local:
 
-### 4. Relatórios
-- Criar uma funcionalidade para gerar relatórios de batidas utilizando PyMuPDF (ou uma biblioteca similar). O relatório deve incluir as batidas de ponto registradas, horas trabalhadas, atrasos e horas extras, formatado de maneira legível.
+    ```sh
+    git clone https://github.com/daniel-root/m2a_teste_vaga_pl_2/tree/feature/eletronic_time_clock
+    cd m2a_teste_vaga_pl_2
+    ```
 
-### 5. Autenticação
-- Implementar um sistema básico de autenticação para usuários (funcionários), permitindo registro e login.
+2. Crie um ambiente virtual:
 
-### 6. Testes Automatizados
-- Implementar testes básicos para o modelo e as views, usando `pytest` ou `unittest`. Os testes devem cobrir:
-  - Validação dos dados do modelo.
-  - Funcionalidade de registro e consulta de batidas.
+    ```sh
+    python -m venv .venv
+    source .venv/bin/activate  # Linux e macOS
+    .venv\Scripts\activate     # Windows
+    ```
 
-### 7. Documentação
-- Incluir um `README.md` com instruções sobre como configurar o ambiente, instalar dependências e rodar o projeto.
-- Documentar funções e classes usando docstrings.
+3. Instale as dependências do projeto:
 
+    ```sh
+    pip install -r requirements.txt
+    ```
 
+4. Renomeei o arquivo `.env.example` para `.env` e configure as variáveis de ambiente contidas no arquivo:
 
-python manage.py collectstatic
-python manage.py createsuperuser
+    ```plaintext
+    DEBUG=on
+    SECRET_KEY=your-secret-key-here
+    ENGINE=postgresql
+    DB_NAME=your_db_name
+    DB_USER=your_db_user
+    DB_PASSWORD=your_db_password
+    DB_HOST=localhost
+    DB_PORT=5432
+    PGADMIN_EMAIL=your_pgadmin_email@example.com
+    PGADMIN_PASSWORD=your_pgadmin_password
+    ```
+
+## Migrações e Coleta de Arquivos Estáticos
+
+1. Faça as migrações do banco de dados:
+
+    ```sh
+    python manage.py makemigrations
+    python manage.py migrate
+    ```
+
+2. Colete os arquivos estáticos:
+
+    ```sh
+    python manage.py collectstatic
+    ```
+
+3. Crie um superusuário para acessar o painel de administração do Django:
+
+    ```sh
+    python manage.py createsuperuser
+    ```
+
+## Executando o Projeto com Docker
+
+1. Construa e inicie os containers Docker:
+
+    ```sh
+    docker compose up --build -d
+    ```
+
+2. Acesse o projeto no navegador através do endereço: `http://localhost:8080`
+
+## Acessando o PgAdmin
+
+1. Acesse o PgAdmin no navegador através do endereço: `http://localhost:5050`
+
+2. Use as credenciais do arquivo `.env` para fazer login.
+
+## Rodando os Testes
+
+Para rodar os testes e verificar se tudo está funcionando corretamente, execute o seguinte comando:
+
+  ```sh
+  python manage.py test
+  ```
