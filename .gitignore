@@ -2,3 +2,5 @@
 migrations
 __pycache__
 time_clock/.env
+static
+db.sqlite3
