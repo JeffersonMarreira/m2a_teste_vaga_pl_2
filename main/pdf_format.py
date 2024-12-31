@@ -7,16 +7,55 @@ from reportlab.platypus import Paragraph
 import io
 
 class PDF(Format):
+    """
+    Classe que implementa a formatação de exportação de dados em formato PDF.
+
+    Métodos:
+        get_title(): Retorna o título do formato.
+        get_extension(): Retorna a extensão do arquivo.
+        get_content_type(): Retorna o tipo de conteúdo MIME.
+        export_data(dataset, **kwargs): Exporta os dados do dataset para um arquivo PDF.
+        import_data(dataset, stream, **kwargs): Importação via PDF não é suportada.
+    """
+
     def get_title(self):
+        """
+        Retorna o título do formato.
+
+        Retorna:
+            str: O título do formato.
+        """
         return "pdf"
 
     def get_extension(self):
+        """
+        Retorna a extensão do arquivo.
+
+        Retorna:
+            str: A extensão do arquivo.
+        """
         return "pdf"
 
     def get_content_type(self):
+        """
+        Retorna o tipo de conteúdo MIME.
+
+        Retorna:
+            str: O tipo de conteúdo MIME.
+        """
         return "application/pdf"
 
     def export_data(self, dataset, **kwargs):
+        """
+        Exporta os dados do dataset para um arquivo PDF.
+
+        Parâmetros:
+            dataset: O dataset contendo os dados a serem exportados.
+            **kwargs: Argumentos adicionais.
+
+        Retorna:
+            bytes: O conteúdo do arquivo PDF em bytes.
+        """
         buffer = io.BytesIO()
         doc = SimpleDocTemplate(buffer, pagesize=landscape(A4))  # Página horizontal
         elements = []
@@ -68,4 +107,10 @@ class PDF(Format):
         return buffer.read()
 
     def import_data(self, dataset, stream, **kwargs):
+        """
+        Levanta uma exceção, pois a importação via PDF não é suportada.
+
+        Lança:
+            NotImplementedError: Sempre, pois a importação via PDF não é suportada.
+        """
         raise NotImplementedError("Importação via PDF não é suportada.")
