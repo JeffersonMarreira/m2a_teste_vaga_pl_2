@@ -81,6 +81,3 @@ class TimeRecord(models.Model):
 
     def __str__(self):
         return f"Ponto de {self.employee.name} em {self.date}"
-
-
-
