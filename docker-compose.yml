@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  web:
+    build: ./
+    command: python manage.py runserver 0.0.0.0:8080 --noreload
+    volumes:
+      - ./:/usr/src/app/
+    ports:
+      - 8080:8080
+    env_file:
+      - ./main/.env
+    environment:
+      DB_HOST: db
+    networks:
+      - mynetwork
+  db:
+    restart: unless-stopped
+    image: postgres
+    environment:
+      POSTGRES_USER: m2a_user
+      POSTGRES_PASSWORD: Msf5%%+7js2P
+      POSTGRES_DB: m2a_db
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    networks:
+      - mynetwork
+
+  pgadmin:
+    restart: unless-stopped
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: m2a@mail.com
+      PGADMIN_DEFAULT_PASSWORD: D85VSI3Pj]5}
+    ports:
+      - "5050:80"
+    networks:
+      - mynetwork
+
+volumes:
+  static_volume:
+  db_data:
+
+networks:
+  mynetwork:
